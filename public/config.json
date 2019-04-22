@@ -1,5 +1,5 @@
 {
-  "routes": "./api/routes.json",
+  "routes": "./routers.json",
   "server": {
     "path": "/md/",
     "ext": ".md"
