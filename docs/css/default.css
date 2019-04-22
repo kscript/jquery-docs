@@ -1,0 +1,9 @@
+.loading-svg {
+	width: 60px;
+	height: 30px;
+	display: inline-block;
+	background: url("/images/loading.svg") center no-repeat;
+}
+.el-loading-text{
+	color: #ff6700!important;
+}

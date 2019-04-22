@@ -1,0 +1,137 @@
+<link rel="stylesheet" href="../css/muilt-picker.css">
+<style>
+.cell{
+    display: table-cell;
+}
+h4{
+    width: 260px;
+}
+.muilt-picker{
+    margin-right: 10px;
+    position: relative;
+}
+.text{
+    padding: 10px 0%;
+}
+</style>
+<div class="wrapper" style="position: relative">
+    <div class="cell">
+        <h4>范围选择器</h4>
+        <div class="salary-picker muilt-picker">
+            <div class="picker-input-group">
+                <input class="picker-start" type="text" name="" readonly>
+                <span class="split-label"></span>
+                <input class="picker-end" type="text" name="" readonly>
+            </div>
+            <div class="picker-container">
+                <!-- <div class="picker-title table-ui">
+                    <div class="table-cell-ui left-label">?</div>
+                    <div class="table-cell-ui center-label">-</div>
+                    <div class="table-cell-ui right-label">?</div>
+                </div> -->
+                <ul class="select-group scroll-bar">
+                    <li class="li-item" data-value="1000">1000</li>
+                    <li class="li-item" data-value="2000">2000</li>
+                    <li class="li-item" data-value="3000">3000</li>
+                    <li class="li-item" data-value="4000">4000</li>
+                    <li class="li-item" data-value="5000">5000</li>
+                    <li class="li-item" data-value="6000">6000</li>
+                    <li class="li-item" data-value="7000">7000</li>
+                    <li class="li-item" data-value="8000">8000</li>
+                    <li class="li-item" data-value="9000">9000</li>
+                    <li class="li-item" data-value="10000">10000</li>
+                </ul>
+            </div>
+        </div>
+        <div class="text">
+            点击 input 来触发选择器, 以用户两次选择的区间值作为结果
+        </div>
+    </div>
+    <div class="cell">
+        <h4>多项选择器</h4>
+        <div class="city-picker muilt-picker">
+            <div class="picker-input-group">
+                <input class="picker-input" type="text" name="" readonly>
+            </div>
+            <div class="picker-container">
+                <ul class="select-group scroll-bar">
+                </ul>
+            </div>
+        </div>
+        <div class="text">
+            点击 input 来触发选择器, 在 beforeChange 里判断用户选择的值的长度
+            <br>
+            当前实例最多允许选择3个选项
+        </div>
+    </div>
+</div>
+<script src="https://kscript.github.io/public/js/jquery.min.js"></script>
+<script src="https://kscript.github.io/muilt-picker/js/muilt-picker.js"></script>
+<script>
+    $(".salary-picker").muiltPicker({
+        mede: 'range',
+        leaveClose: false,
+        autoClose: false,
+        resetSelected: true,
+        customElms: function(source, context){
+            return {
+                start: $(".picker-start", source),
+                end: $(".picker-end", source)
+            }
+        },
+        outsideClick: function(selected){
+            return selected.length > 1;
+        },
+        beforeChange: function($that, selected, active){
+            if (active == 'start') {
+                var index = $that.index();
+                this.options.active = 'end';
+                this.elms.start.val($that.data("value"));
+                this.elms.end.val('');
+                // 将 index 小于当前选择元素的兄弟元素设置为不可点击
+                $that.siblings().each(function(){
+                    if (index > $(this).index()) {
+                        $(this).addClass("disabled");
+                    }
+                })
+            } else {
+                this.options.active = 'start';
+                this.elms.end.val($that.data("value"));
+            }
+            $that.addClass("selected");
+        },
+        afterChange: function($that, selected, active){
+            active == 'start' && this.hide();
+        },
+        afterHide: function(){
+            this.options.active = 'start';
+            this.elms.option.removeClass("selected").removeClass("disabled");
+        }
+    });
+    $(".city-picker").muiltPicker({
+        mede: 'muilt',
+        resetSelected: false,
+        customElms: function(source, context) {
+            return {
+                input: $(".picker-input", source)
+            }
+        },
+        generator: function(done){
+            return ['北京', '上海', '广州', '深圳'].map(function(item, index){
+                return '<li class="li-item" data-value="' + index + '">' + item + '</li>'
+            }).join("");
+        },
+        beforeChange: function($that, selected, active) {
+            if (selected.length >= 3 && !$that.hasClass("selected")) return false;
+            $that.toggleClass("selected");
+        },
+        afterChange: function($that, selected, active){
+            this.elms.input.val(selected.map(function(item){
+                return $(item).text();
+            }).join());
+        },
+        outsideClick: function(selected){
+            return selected.length > 0;
+        },
+    });
+</script>
