@@ -9,14 +9,15 @@ jQuery && (function ($) {
          * @param {function=} errorFn 回调
          */
         http: function (option, settings, success, error) {
-    
+
             option = option || {};
     
             var args = arguments;
             var successFn, errorFn;
             var defaultSettings = {
                 retry: 3,
-                showError: true
+                showError: true,
+                toast: 'toast'
             }
     
             var holder = packing(['action', 'method', 'success', 'error'], option);
@@ -47,12 +48,23 @@ jQuery && (function ($) {
                 url: '',
                 type: 'get',
                 dataType: 'json',
+                timeout: 30000,
                 success: function (response) {
                     successHandler.call(this, response);
                 },
-                error: function (error) {
-                    if (--settings.retry > 0) {
-                        $.http(option, settings, successFn, errorFn);
+                error: function (error, status) {
+                    if (status === 'timeout') {
+                        if (--settings.retry > 0) {
+                            $.http(option, settings, successFn, errorFn);
+                        } else {
+                            showSwal({
+                                type: "error",
+                                confirmButtonText: '好',
+                                text: "请求超时"
+                            }, function (handler) {
+                                errorFn && errorFn.apply(self, arguments);
+                            });
+                        }
                     } else {
                         errorHandler.apply(this, arguments);
                     }
@@ -82,9 +94,13 @@ jQuery && (function ($) {
                         errorFn && errorFn.call(self, null, response);
                     });
                 } else {
-                    // if (response.tips) {
-                    //     localStorage.setItem("tips", JSON.stringify(response.tips));
-                    // }
+                    try{
+                        if (settings.toast && response[settings.toast]) {
+                            localStorage.setItem(settings.toast, JSON.stringify(settings.toast));
+                        }
+                    } catch(e) {
+                        console.log(e);
+                    }
                     successFn && successFn.call(self, response);
                 }
             }

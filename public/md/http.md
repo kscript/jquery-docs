@@ -34,6 +34,7 @@ $.http 方法通过对 $.ajax 的请求结果进行处理, 实现: 错误拦截,
 | settings | object | 扩展功能设置, 可省参数 |
 | settings.retry | number | 请求失败时的重试次数 |
 | settings.showError | boolean | 请求出错时提示错误信息 |
+| settings.toast | string | 提示信息key, 为空时不提示 |
 | success | function | 请求成功回调, 不需要配置settings的话, success 可以作为第二个参数 |
 | error | function | 请求出错回调 |
 
@@ -52,5 +53,6 @@ $.http 方法通过对 $.ajax 的请求结果进行处理, 实现: 错误拦截,
 |--|--|--|
 | showError | "true" | 显示错误提示 |
 | retry | 3 | 重试次数 |
+| toast | 'toast | 提示信息key |
 
 
