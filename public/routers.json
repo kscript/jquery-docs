@@ -16,6 +16,10 @@
     "label": "表单提交"
   },
   {
+    "path": "/viewer#toast",
+    "label": "信息提示"
+  },
+  {
     "path": "/viewer#params",
     "label": "参数信息收集"
   }
