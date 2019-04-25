@@ -24,23 +24,23 @@ jQuery && (function ($) {
                 var defaults = {
                     // range/muilt
                     mode: 'range',
-
+    
                     // ----- 选择器 -----
-
+    
                     // 是否在组件内部查询选择器
                     // true: 组件内查询 false: 全局查询
                     inner: true,
-
+    
                     // 组件ui容器 (存在于组件内部, 忽略inner)
                     container: '.picker-container',
                     // 列表选择器 (存在于组件内部, 忽略inner)
                     selectSelecotr: '.select-group',
                     optionSelecotr: '.li-item',
                     scrollSelecotr: '.scroll-bar',
-
+    
                     // 用于激活组件的元素
                     triggerSelecotr: ".picker-input-group",
-
+    
                     // ----- 其它 -----
                     // 设置为内联时, 组件内将不会调用关闭
                     inline: false,
@@ -57,12 +57,12 @@ jQuery && (function ($) {
                     //              console.log(arguments); 
                     //         }
                     // },
-
+    
                     // 有自定义函数时, 只保留生命周期/插件配置, 将控制权交给自定义函数
                     // custom: function () { console.log(this) },
-
+    
                     // ----- 组件逻辑 -----
-
+    
                     // 生成数据的方式: 异步回调/同步
                     // 当async为true时, 需要在generator内调用done才可以继续向下执行
                     async: false,
@@ -85,15 +85,15 @@ jQuery && (function ($) {
                 }
                 var selected = [];
                 var picker = {};
-
+    
                 execCommand('beforeInit');
-
+    
                 $.extend(picker, plugins(options, source));
-
+    
                 custom(picker);
-
+    
                 source.data("muiltPicker", picker);
-
+    
                 execCommand('afterInit');
                 /**
                  * 获取最终的配置项
@@ -123,6 +123,7 @@ jQuery && (function ($) {
                     // picker 中 除了 setOptions/destroy 方法返回options之外, 都返回this
                     picker = $.extend(picker, {
                         bus: {},
+                        state: 'hide',
                         elms: elms,
                         source: source,
                         options: options,
@@ -136,6 +137,7 @@ jQuery && (function ($) {
                         show: function () {
                             execCommand('beforeShow');
                             this.elms.container.show();
+                            this.state = 'show';
                             execCommand('afterShow');
                             return this;
                         },
@@ -146,7 +148,7 @@ jQuery && (function ($) {
                                 $.each([
                                     'startEl',
                                     'endEl',
-
+    
                                     'startLabel',
                                     'splitLabel',
                                     'endLabel'
@@ -172,11 +174,15 @@ jQuery && (function ($) {
                             execCommand('destroy');
                         },
                         hide: function () {
-                            if (options.beforeHide  != 'function' || execCommand('beforeHide') !== false) {
+                            if (options.inline) {
+                                return this;
+                            }
+                            if (typeof options.beforeHide != 'function' || execCommand('beforeHide', [selected])) {
                                 if (this.options.resetSelected) {
                                     selected.splice(0);
                                 }
                                 this.elms.container.hide();
+                                this.state = 'hide';
                                 execCommand('afterHide');
                             }
                             return this;
@@ -217,7 +223,7 @@ jQuery && (function ($) {
                  * @param {object} data source.data()
                  */
                 function getDefaultOptions(defaults, data) {
-                    data = typeof data !== 'object' ? data : {};
+                    data = typeof data === 'object' ? data : {};
                     var result = {};
                     // 从data()上读取的配置
                     $.each(defaults, function (key, item) {
@@ -229,7 +235,7 @@ jQuery && (function ($) {
                     });
                     return result;
                 }
-
+    
                 function plugins(options, source) {
                     var picker;
                     var plugins = options.plugins;
@@ -248,7 +254,7 @@ jQuery && (function ($) {
                     }
                     return picker;
                 }
-
+    
                 function custom(picker) {
                     if (!picker.options.custom) {
                         picker.setHtml(function () {
@@ -261,7 +267,7 @@ jQuery && (function ($) {
                         execCommand('custom');
                     }
                 }
-
+    
                 function setOptions(option) {
                     if (arguments.length) {
                         if (typeof option.customElms === 'function') {
@@ -274,7 +280,7 @@ jQuery && (function ($) {
                         return $.extend(picker.options, option);
                     }
                 }
-
+    
                 function addEvent() {
                     var args = arguments;
                     if (args.length < 3) {
@@ -319,9 +325,13 @@ jQuery && (function ($) {
                         "click",
                         options.triggerSelecotr,
                         function () {
-                            $(this).closest(".is-empty").removeClass("is-empty");
-                            options.autoShow && picker.show();
-                            elms.select.scrollTop(0);
+                            if (picker.state != 'show') {
+                                $(this).closest(".is-empty").removeClass("is-empty");
+                                options.autoShow && picker.show();
+                                elms.select.scrollTop(0);
+                            } else {
+                                picker.hide();
+                            }
                             return false;
                         }
                     );
@@ -339,7 +349,7 @@ jQuery && (function ($) {
                             if (!$parent) {
                                 if (options.autoClose || execCommand("outsideClick", [selected])) {
                                     if (!$parent || $parent[0] === source[0]) {
-                                        !options.inline && elms.container.css("display") !== 'none' && picker.hide();
+                                        elms.container.css("display") !== 'none' && picker.hide();
                                     }
                                 }
                             }
@@ -359,7 +369,7 @@ jQuery && (function ($) {
                             if (typeof options.afterChange == 'function') {
                                 return options.afterChange.call(picker, $(this), selected, options.active);
                             }
-
+    
                             return false;
                         }
                     );
@@ -376,7 +386,7 @@ jQuery && (function ($) {
                 function execCommand(fname, args) {
                     return fname && typeof options[fname] === 'function' && options[fname].apply(picker, $.isArray(args) ? args : arguments.length > 1 ? [args] : []);
                 }
-
+    
                 if ($.fn.muiltPicker.pickers && $.isArray($.fn.muiltPicker.pickers)) {
                     $.fn.muiltPicker.pickers.push(picker);
                 } else {
