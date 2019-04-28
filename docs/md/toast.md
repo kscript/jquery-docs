@@ -11,7 +11,7 @@
 
 ``` js
     $.http({
-        url: '/test.json'
+        url: '/docs/test.json'
     },
     function (data) {
         $.toast({
