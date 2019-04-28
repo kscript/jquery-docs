@@ -1,20 +1,21 @@
 ## myParams
 参数收集
 
-### 设计构想
-之前在生成二维码时需要用到一些参数, 为了模块化的管理这些参数, 实现了一个收集参数的函数.   
+### 需求/用途
+在生成二维码时需要用到一些参数, 为了模块化的管理这些参数, 实现了一个收集参数的函数.   
 同时, 在这个函数又进行了增加了一些控制, 使它成为一个通用的功能, 用于参数信息的收集.
 
 ### 使用示例
 
-<div style="padding-bottom: 210px;position: relative; z-index: 99999;">
-<iframe src="html/params.html?form=iframe#test" style="border: 0;width: 100%;min-width: 600px;min-height: 400px; position: absolute;"></iframe>
+<div class="iframe-box" style="padding-bottom: 260px;position: relative; z-index: 99999;">
+<iframe src="html/params.html?id=111#test" style="border: 0;width: 100%;min-width: 600px;min-height: 260px; position: absolute;"></iframe>
 </div>
 
 ``` js
 var token = '123';
 myParams({
     url: [
+        'id',
         {
             hash: function(){
                 return location.hash
@@ -33,11 +34,11 @@ myParams({
 
 |属性|类型|说明|
 |--|--|--|
-| option | object | 需要收集的参数 |
+| options | object | 需要收集的参数 |
 | settings | object | 用于控制的配置, 可省参数 |
 | func | function | 当监听了表单元素, 表单元素触发 指定事件时的回调 |
 
-- option 属性
+- options 属性
 
 |属性|类型|说明|
 |--|--|--|

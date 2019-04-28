@@ -3,7 +3,7 @@ jQuery && (function ($) {
         /**
          * 提交表单
          * @func
-         * @param {object} option ajax配置 
+         * @param {object} options ajax配置 
          * 
          * @param {object=} settings 配置信息 (可以不传settings)
          * @param {string=} settings.submit 提交按钮 (选择器一般应保持唯一)
@@ -15,7 +15,7 @@ jQuery && (function ($) {
          * @param {function=} errorFn 回调 errorFn(error, $event); 比$.http多一个点击提交按钮事件的 $event 参数
          * @example
          * $("#register-form").formSubmit(
-            * // option
+            * // options
             * {
             *     url: '/auth',
             *     type: 'post',
@@ -39,7 +39,7 @@ jQuery && (function ($) {
             * function(error, $event){
             * });
             */
-        formSubmit: function (option, settings, success, error) {
+        formSubmit: function (options, settings, success, error) {
             var container = this;
             var args = arguments;
             var successFn, errorFn;
@@ -65,7 +65,7 @@ jQuery && (function ($) {
                     state: "ready"
                 }, settings);
                 var result;
-                var ajaxOption = function (form, option) {
+                var ajaxOption = function (form, options) {
                     // 读取表单上的属性
                     var formOption = {
                         url: form.attr('action'),
@@ -81,10 +81,10 @@ jQuery && (function ($) {
                             return true;
                         }
                     },
-                        option,
+                        options,
                         formOption
                     );
-                    var data = (option || {}).data;
+                    var data = (options || {}).data;
                     if (typeof data == 'function') {
                         result.data = data(form);
                     } else {
@@ -99,11 +99,11 @@ jQuery && (function ($) {
                     // 如果不是, 可以看作是用户在验证通过的表单的元素上按下了Enter, 间接地触发了提交动作
                     var that = $event instanceof Object && $event.originalEvent instanceof MouseEvent ? $(this) : $(settings.submit, settings.container || container);
                     var form = settings.isBubble ? that.closest("form") : $(settings.form, settings.container || container);
-                    var submitOption = ajaxOption(form, option);
+                    var submitOption = ajaxOption(form, options);
                     var beforeSend = submitOption.beforeSend;
-                    submitOption.beforeSend = function (xhr, option) {
+                    submitOption.beforeSend = function (xhr, options) {
                         var disabled = that.hasClass(settings.disabledClass);
-                        var res = beforeSend ? beforeSend(xhr, option, form) : true;
+                        var res = beforeSend ? beforeSend(xhr, options, form) : true;
                         // 如果没有拦截提交, 且设置了需要验证
                         if (!beforeSend && settings.validate) {
                             // 尝试验证表单

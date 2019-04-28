@@ -7,3 +7,6 @@
 .el-loading-text{
 	color: #ff6700!important;
 }
+.iframe-box{
+	border: 1px solid #ddd;
+}

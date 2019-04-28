@@ -1,9 +1,9 @@
 ## $.fn.formSubmit
 表单提交
 
-### 设计构想
+### 需求/用途
 为了防止表单的重复提交, 简化/统一表单的提交流程, 用尽量少的配置, 完成表单的提交.   
-和多项选择器不同的是, 表单提交依赖dom结构(表单)
+和多项选择器不同的是, 表单提交依赖dom结构(form + button/input)
 
 ### 使用示例
 
@@ -16,12 +16,12 @@
 ```
 // 给表单绑定formSubmit
 ``` js
-    $(container).formSubmit(ajaxOption, settings, success, error);
+    $(".container").formSubmit(ajaxOption, settings, success, error);
     // 如果在form表单上配置了 action, 那么可以这样写
-    $(container).formSubmit({}, success, error);
+    $(".container").formSubmit({}, success, error);
 ```
 <font color="green">
-formSubmit 需要一个表单, 并且最好提供 action, method (表单配置权重 > option配置权重, 这样做可以在选择器为多个表单时, 保持提交信息的准确性)
+formSubmit 需要一个表单, 并且最好提供 action, method (表单配置权重 > options配置权重, 这样做可以在选择器为多个表单时, 保持提交信息的准确性)
 </font>
 <font color="green">
 formSubmit 默认使用 .submit 作为提交按钮的选择器, 建议用 button/input[type='submit'] 标签, 因为这样可以在用户按enter键时触发提交

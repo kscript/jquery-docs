@@ -1,18 +1,17 @@
 ## $.fn.muiltPicker
 一个用于选择列表项的组件, 支持: 单选 / 多选 / 范围选择 / 自定义 
 
-### 设计构想
+### 需求/用途
 写muilt-picker之初是按照一个范围选择器来写的, 由于后面又有其它组件要写, 这些组件的表现形式和功能看起来并不一样, 但内部的机制是基本一致的, 所以在抽离了具体业务逻辑后, 形成了这么一个类似高阶组件的东西. 
 muilt-picker组件基本不涉及ui(但提供容器宽/选择列表高的配置)和业务逻辑, 只提供一套 组件的实现机制, 使用时可以通过不同方法,钩子,以及扩展来构成具体的业务组件, 参考如下:
 <iframe src="./images/muilt-picker.svg" width="700" height="600" style="border: 0;"></iframe>
 
-
 ### 使用说明
 
 1. 初始化 picker
-同一个selector如果多次调用, 则第一次时为初始化, 其它为修改option  
+同一个selector如果多次调用, 则第一次时为初始化, 其它为修改options  
 ``` js
-$(selector).muiltPicker(option);
+$(selector).muiltPicker(options);
 ```
 
 2. 获取 picker 
@@ -35,6 +34,7 @@ $(".muilt-picker").data("muiltPicker");
 | inner | boolean | true | 从选择器内部选择 |
 | inline | boolean | false | 是否嵌入页面内 |
 | autoClose | boolean | false | 点击组件外自动关闭 |
+| triggerClose | boolean | false | 组件显示时, 点击触发选择器元素是否关闭 |
 | leaveClose | boolean | false | 鼠标移出组件容器时关闭 |
 | autoShow | boolean | true | 激活组件时自动显示 |
 | container | string/jQuery/element | ".picker-container" | 显示容器(应存在于组件内部, 忽略inner) |
@@ -87,17 +87,17 @@ $(".muilt-picker").data("muiltPicker");
 | addEvents | function | 添加事件监听 |
 | offEvent | function | 取消事件监听 |
 | setEvents | function | 设置默认的事件监听 |
+| select | function | 选择列表项(给组件设置默认值) |
 | clear | function | 清除 |
 | destroy | function | 销毁 |
 
 <font  color="green">
-暴露出来的 setHtml/setStyles/setEvents 方法主要是为了在自定义时用的. (因为配置了 option.custom 函数的话, 将不会自动调用这些方法) <br>
+暴露出来的 setHtml/setStyles/setEvents 方法主要是为了在自定义时用的. (因为配置了 options.custom 函数的话, 将不会自动调用这些方法) <br>
 如果要改dom结构或者样式, 直接改即可, 不必使用这些方法~
 </font>
 
 ### 使用示例
-
-<div style="padding-bottom: 400px;position: relative; z-index: 99999;">
+<div class="iframe-box" style="padding-bottom: 400px;position: relative; z-index: 99999;">
 <iframe src="html/muilt-picker.html" style="border: 0;width: 100%;min-width: 600px;min-height: 400px; position: absolute;"></iframe>
 </div>
 

@@ -1,5 +1,5 @@
 jQuery && (function($){
-    function Params (option, settings, func) {
+    function Params (options, settings, func) {
         var args = arguments;
         var _func = func;
         var defaultSettings = {
@@ -12,21 +12,21 @@ jQuery && (function($){
             settings = {}
         }
         this.settings = settings = $.extend({}, defaultSettings, settings instanceof Object ? settings : {});
-        this.option = option || {};
+        this.options = options || {};
         this.func = _func;
     
         if (!settings.muilt) {
-            this.offEvent(this.option);
+            this.offEvent(this.options);
         }
         this.params = this.collect(true);
         return this;
     }
     Params.prototype = {
         constructor: Params,
-        offEvent: function (option) {
+        offEvent: function (options) {
             var self = this;
-            option = option || self.option;
-            var elms = self.getList(option.form || '');
+            options = options || self.options;
+            var elms = self.getList(options.form || '');
             $.each(elms, function(index, item) {
                 $("[name='" + item + "']").off("input change", self.bindParams);
             });
@@ -88,8 +88,8 @@ jQuery && (function($){
             var json = {};
             var name;
             var value;
-            var option = this.option;
-            $.each(option, function(type, data){
+            var options = this.options;
+            $.each(options, function(type, data){
                 $.each(self.getList(data), function(index, item){
                     if (type == 'param') {
                         var temp = self.format(item);
@@ -163,22 +163,22 @@ jQuery && (function($){
     /**
      * 获取参数信息
      * @func
-     * @param {object} option 需要的参数 
-     * @param {string|string[]|object[]} option.url 从url里取  
-     * @param {string|string[]|object[]} option.form 从表单元素里取(传name)   
-     * @param {string|string[]|object[]} option.var 变量字符串, 从挂载在window上的变量上取值  
-     * @param {string|string[]|object[]} option.cookie 从cookie上取值   
-     * @param {string|string[]|object[]} option.text 选择器字符串, 从选到的元素上取text(), 元素需要有data-name   
-     * @param {string|string[]|object[]} option.data 选择器字符串, 从选到的元素上取data("value"), 元素需要有data-name  
-     * @param {object|object[]} option.param [{name:value}]/[{name: name, value: value}]格式的数据, 表示传入时已处理过, 不需要再取值的数据, 统一转换为[{name: name, value: value}]后直接合并
+     * @param {object} options 需要的参数 
+     * @param {string|string[]|object[]} options.url 从url里取  
+     * @param {string|string[]|object[]} options.form 从表单元素里取(传name)   
+     * @param {string|string[]|object[]} options.var 变量字符串, 从挂载在window上的变量上取值  
+     * @param {string|string[]|object[]} options.cookie 从cookie上取值   
+     * @param {string|string[]|object[]} options.text 选择器字符串, 从选到的元素上取text(), 元素需要有data-name   
+     * @param {string|string[]|object[]} options.data 选择器字符串, 从选到的元素上取data("value"), 元素需要有data-name  
+     * @param {object|object[]} options.param [{name:value}]/[{name: name, value: value}]格式的数据, 表示传入时已处理过, 不需要再取值的数据, 统一转换为[{name: name, value: value}]后直接合并
      * @param {object=} settings 配置
      * @param {boolean=} settings.muilt 是否允许表单元素注册多次事件  
      * @param {function=} func 表单元素更新时的回调   
      * @desc 
-     * option中的属性, 除param外, 值都有两种形式 1. 字符串 2.字符串 & 对象:函数/值 的混合数组, 为字符串时, 用,分割
+     * options中的属性, 除param外, 值都有两种形式 1. 字符串 2.字符串 & 对象:函数/值 的混合数组, 为字符串时, 用,分割
      */
-    function myParams(option, settings, func){
-        return new Params(option, settings,  func);
+    function myParams(options, settings, func){
+        return new Params(options, settings,  func);
     }
     window.myParams = myParams;
 })(jQuery);

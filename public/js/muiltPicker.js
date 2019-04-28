@@ -48,6 +48,7 @@ jQuery && (function ($) {
                     scrollBarHeight: '240px',
                     // 激活组件时自动显示container
                     autoShow: true,
+                    triggerClose: false,
                     // 鼠标移出时关闭
                     leaveClose: false,
                     // customElms: function(){return {}},
@@ -134,6 +135,23 @@ jQuery && (function ($) {
                         addEvent: addEvent,
                         offEvent: offEvent,
                         setOptions: setOptions,
+                        select: function(values){
+                            values = $.isArray(values) ? values : [values];
+                            var maps = {};
+                            $.each(values, function(index, item){
+                                maps[item] = (maps[item] || 0) + 1;
+                            });
+                            if (this.elms.option) {
+                                $.each(this.elms.option, function(index, item){
+                                    var num = maps[$(this).data("value")];
+                                    if (num) {
+                                        while (num-- > 0) {
+                                            $(this).trigger("click");
+                                        }
+                                    }
+                                });
+                            }
+                        },
                         show: function () {
                             execCommand('beforeShow');
                             this.elms.container.show();
@@ -330,7 +348,7 @@ jQuery && (function ($) {
                                 options.autoShow && picker.show();
                                 elms.select.scrollTop(0);
                             } else {
-                                picker.hide();
+                                options.triggerClose && picker.hide();
                             }
                             return false;
                         }

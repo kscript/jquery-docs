@@ -1,12 +1,28 @@
-## toast
+## $.toast
 提示信息
 
-### 设计构想
+### 需求/用途
 
+### 使用示例
+
+<div class="iframe-box" style="padding-bottom: 400px;position: relative; z-index: 99999;">
+<iframe src="html/toast.html#toast" style="border: 0;width: 100%;min-width: 600px;min-height: 400px; position: absolute;"></iframe>
+</div>
+
+``` js
+    $.http({
+        url: '/test.json'
+    },
+    function (data) {
+        $.toast({
+            list: data.toast
+        });
+    });
+```
 
 ### 参数说明
 
- - option参数 属性
+ - options参数 属性
 
 |属性|类型|默认值|说明|
 |--|--|--|--|
@@ -20,3 +36,5 @@
 | close | function | - | 当前提示信息已关闭时, 参数: [index: 当前toast的索引] |
 | complete | function | - | 提示信息已全部显示完时 |
 | queue | function | - | 用于处理提示消息队列, 递归list并逐条显示 |
+
+
