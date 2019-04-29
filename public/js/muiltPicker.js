@@ -120,8 +120,6 @@ jQuery && (function ($) {
                         autoClose: [],
                         liItemClick: []
                     }
-                    // execCommand 方法 不可以在picker变量未声明前执行
-                    // picker 中 除了 setOptions/destroy 方法返回options之外, 都返回this
                     picker = $.extend(picker, {
                         bus: {},
                         state: 'hide',
@@ -160,24 +158,7 @@ jQuery && (function ($) {
                             return this;
                         },
                         clear: function () {
-                            var elms = this.elms;
-                            // 先调用用户设置的clear方法, 如果执行结果为false, 且是range模式, 那么触发默认的清除功能
-                            if (!execCommand('clear') && this.options.mode === 'range') {
-                                $.each([
-                                    'startEl',
-                                    'endEl',
-    
-                                    'startLabel',
-                                    'splitLabel',
-                                    'endLabel'
-                                ], function (index, item) {
-                                    if (index < 2) {
-                                        elms[item].val('')
-                                    } else {
-                                        elms[item].text('');
-                                    }
-                                })
-                            }
+                            execCommand('clear');
                             return this;
                         },
                         destroy: function () {
@@ -185,11 +166,12 @@ jQuery && (function ($) {
                             for (var key in this.events) {
                                 this.offEvent.apply(null, this.events[key]);
                             }
+                            this.source.removeData("muiltPicker");
                             for (var i in this) {
                                 delete this[i];
                             }
-                            this.source.removeData("muiltPicker");
                             execCommand('destroy');
+                            return this;
                         },
                         hide: function () {
                             if (options.inline) {
@@ -295,8 +277,9 @@ jQuery && (function ($) {
                                     : {}
                             );
                         }
-                        return $.extend(picker.options, option);
+                        $.extend(picker.options, option);
                     }
+                    return this;
                 }
     
                 function addEvent() {

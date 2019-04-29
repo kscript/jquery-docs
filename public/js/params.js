@@ -138,6 +138,8 @@ jQuery && (function($){
                 result = list.split(",");
             } else if ($.isArray(list)) {
                 result = list;
+            } else if (list instanceof Object) {
+                result = [list];
             }
             return result;
         },

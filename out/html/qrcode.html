@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>qrcode</title>
+</head>
+<body>
+    <div class="qrcode"></div>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/qrcode.min.js"></script>
+    <script src="../js/params.js"></script>
+    <script src="../js/sweetalert2.js"></script>
+    <script src="../js/http.js"></script>
+    <script src="../js/qrcode.js"></script>
+    <script>
+        var token = 'f65fc8448wnvSU1yHijqU13STm7eglnXD1V5n11O'
+        var count = 50;
+        $(".qrcode").qrcode({
+            qrcode: {
+                correctLevel: QRCode.CorrectLevel.L
+            },
+            http: {
+                url: '../test.json',
+                type: 'get',
+                data: function(){
+                    return {
+                        key: this.key
+                    };
+                }
+            },
+            settings: {
+                expire: 2 * 60 * 1000
+            },
+            params: {
+                url: [
+                    'id',
+                    {
+                        hash: function () {
+                            return location.hash
+                        }
+                    }
+                ],
+                form: 'name'
+            },
+            merge: function(data) {
+                return {
+                    token: token,
+                    data: data
+                }
+            },
+            error: function(){
+                // console.log(this, arguments);
+                // 继续尝试
+                this.timer();
+            },
+            verify: function(data) {
+                if (data.status - 1 === 0) {
+                    return true;
+                }
+                return count-- <= 0;
+            },
+            done: function(){
+                console.log('扫码成功', this);
+            }
+        });
+    </script>
+</body>
+</html>

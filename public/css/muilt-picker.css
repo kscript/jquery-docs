@@ -1,12 +1,3 @@
-.wrapper {
-    position: relative;
-    width: 300px;
-}
-
-.wrapper .picker-input-group {
-    border: 1px solid #eee;
-}
-
 .scroll-bar::-webkit-scrollbar {
     width: 4px;
     background-color: transparent;
@@ -27,6 +18,9 @@
     border-radius: 4px;
 }
 
+.muilt-picker{
+    position: relative;
+}
 .muilt-picker .picker-container {
     display: none;
     position: absolute;
@@ -44,6 +38,7 @@
 }
 
 .muilt-picker .picker-input-group {
+    border: 1px solid #eee;
     overflow: hidden;
     _zoom: 1;
 }
@@ -126,7 +121,6 @@
     color: #aaa;
     background-color: #fff;
 }
-
 
 .salary-picker input{
     max-width: 45%;

@@ -32,23 +32,23 @@ $(".muilt-picker").data("muiltPicker");
 |--|--|--|--|--|
 | mode | string | "range" | - |
 | inner | boolean | true | 从选择器内部选择 |
+| autoShow | boolean | true | 激活组件时自动显示 |
+| resetSelected | boolean | true | 每次隐藏时是否重置选择 |
 | inline | boolean | false | 是否嵌入页面内 |
+| async | boolean | false | 使用异步方法生成列表 |
 | autoClose | boolean | false | 点击组件外自动关闭 |
 | triggerClose | boolean | false | 组件显示时, 点击触发选择器元素是否关闭 |
 | leaveClose | boolean | false | 鼠标移出组件容器时关闭 |
-| autoShow | boolean | true | 激活组件时自动显示 |
-| container | string/jQuery/element | ".picker-container" | 显示容器(应存在于组件内部, 忽略inner) |
-| selectSelecotr | string/jQuery/element | ".select-group" | 选择列表元素的选择器(应存在于组件内部, 忽略inner) |
-| optionSelecotr | string/jQuery/element | ".li-item" | 选项元素的选择器(应存在于组件内部, 忽略inner) |
-| triggerSelecotr | string/jQuery/element | ".picker-input-group" | 用于激活组件的选择器 |
-| scrollSelecotr | string/jQuery/element | ".scroll-bar" | 滚动条元素 |
+| container | selector \[$()第一个参数] | ".picker-container" | 显示容器(应存在于组件内部, 忽略inner) |
+| selectSelecotr | selector \[$()第一个参数] | ".select-group" | 选择列表元素的选择器(应存在于组件内部, 忽略inner) |
+| optionSelecotr | selector \[$()第一个参数] | ".li-item" | 选项元素的选择器(应存在于组件内部, 忽略inner) |
+| triggerSelecotr | selector \[$()第一个参数] | ".picker-input-group" | 用于激活组件的选择器 |
+| scrollSelecotr | selector \[$()第一个参数] | ".scroll-bar" | 滚动条元素 |
 | containerWidth | string/number | "100%" | 容器宽 |
 | scrollBarHeight | string/number | "240px" | 选择列表高 |
-| resetSelected | boolean | true | 每次隐藏时是否重置选择 |
-| async | boolean | false | 使用异步方法生成列表 |
 | custom | function | - | 有自定义函数时, 只保留生命周期/插件配置, 将控制权交给自定义函数 |
 | customElms | function | - | 向选择器添加自定义元素 |
-| generator | function(done) | - | 用于生成选择列表的函数 不为函数时, 默认使用html中的结构 |
+| generator | function(done) | - | 用于生成选择列表的函数 不为函数时, 默认使用html中的结构, 当async为true时, 需使用回调函数done, 来传递生成的内容 |
 | plugins | object | - | 扩展(实验功能, 慎用) |
 
 - 函数钩子
@@ -97,8 +97,14 @@ $(".muilt-picker").data("muiltPicker");
 </font>
 
 ### 使用示例
-<div class="iframe-box" style="padding-bottom: 400px;position: relative; z-index: 99999;">
-<iframe src="html/muilt-picker.html" style="border: 0;width: 100%;min-width: 600px;min-height: 400px; position: absolute;"></iframe>
+
+- 范围选择器
+<div class="iframe-box no-border" style="padding-bottom: 360px;position: relative; z-index: 99999;">
+<div class="handlers">
+    <div class="btn refresh">刷新示例</div>
+    <div class="btn open">新窗口打开</div>
+</div>
+<iframe src="html/muilt-picker1.html" style="border: 0;width: 100%;min-width: 600px;min-height: 360px; position: absolute;"></iframe>
 </div>
 
 范围选择器 dom 结构
@@ -122,18 +128,26 @@ $(".muilt-picker").data("muiltPicker");
 ``` js
 $(".salary-picker").muiltPicker({
     mede: 'range',
+    // 鼠标移出组件容器时关闭?
     leaveClose: false,
+    // 点击组件外时自动关闭?
     autoClose: false,
+    // 隐藏组件时重置已选项? 
     resetSelected: true,
+    // 自定义一些即将会用到的元素, 将它们合并到 this.elms
     customElms: function(source, context){
         return {
             start: $(".picker-start", source),
             end: $(".picker-end", source)
         }
     },
+    // 在组件外点击时, 会调用outsideClick, 根据返回值确定是否要隐藏组件
+    // true: 隐藏 flase: 阻止隐藏
     outsideClick: function(selected){
-        return selected.length > 1;
+        return !this.options.active || this.options.active == 'start';
     },
+    // 用户点击了某一个选项, 如果 beforeChange 里的返回值为false, 那么可以阻止触发组件的afterChange方法
+    // 最佳实践: 在 beforeChange 处理是否 触发选择项改变, 在afterChange处理 选择项改变
     beforeChange: function($that, selected, active){
         if (active == 'start') {
             var index = $that.index();
@@ -152,9 +166,11 @@ $(".salary-picker").muiltPicker({
         }
         $that.addClass("selected");
     },
+    // 处理 用户选择项改变 时的逻辑
     afterChange: function($that, selected, active){
         active == 'start' && this.hide();
     },
+    // 组件已隐藏时
     afterHide: function(){
         this.options.active = 'start';
         this.elms.option.removeClass("selected").removeClass("disabled");
@@ -162,7 +178,14 @@ $(".salary-picker").muiltPicker({
 });
 ```
 
-
+- 多项选择器
+<div class="iframe-box no-border" style="padding-bottom: 360px;position: relative; z-index: 99999;">
+<div class="handlers">
+    <div class="btn refresh">刷新示例</div>
+    <div class="btn open">新窗口打开</div>
+</div>
+<iframe src="html/muilt-picker2.html" style="border: 0;width: 100%;min-width: 600px;min-height: 360px; position: absolute;"></iframe>
+</div>
 多项选择器 dom 结构
 
 ``` html
@@ -181,28 +204,36 @@ $(".salary-picker").muiltPicker({
 ``` js
 $(".city-picker").muiltPicker({
     mede: 'muilt',
+    // 隐藏组件时重置已选项? 
     resetSelected: false,
+    // 生成dom结构
+    generator: function(done){
+        return ['北京', '上海', '广州', '深圳'].map(function(item, index){
+            return '<li class="li-item" data-value="' + index + '">' + item + '</li>'
+        }).join("");
+    },
+    // 自定义一些即将会用到的元素, 将它们合并到 this.elms
     customElms: function(source, context) {
         return {
             input: $(".picker-input", source)
         }
     },
-    generator: function(){
-        return ['北京', '上海', '广州', '深圳'].map(function(item, index){
-            return '<li class="li-item" data-value="' + index + '">' + item + '</li>'
-        }).join("")
+    // 在组件外点击时, 会调用outsideClick, 根据返回值确定是否要隐藏组件
+    // true: 隐藏 flase: 阻止隐藏
+    outsideClick: function(selected){
+        return selected.length > 0;
     },
+    // 用户点击了某一个选项, 如果 beforeChange 里的返回值为false, 那么可以阻止触发组件的afterChange方法
+    // 最佳实践: 在 beforeChange 处理是否 触发选择项改变, 在afterChange处理 选择项改变
     beforeChange: function($that, selected, active) {
         if (selected.length >= 3 && !$that.hasClass("selected")) return false;
         $that.toggleClass("selected");
     },
+    // 用户选择项改变
     afterChange: function($that, selected, active){
         this.elms.input.val(selected.map(function(item){
             return $(item).text();
         }).join());
-    },
-    outsideClick: function(selected){
-        return selected.length > 0;
     }
 });
 ```

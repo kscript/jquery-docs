@@ -20,6 +20,10 @@
     "label": "信息提示"
   },
   {
+    "path": "/viewer#qrcode",
+    "label": "二维码"
+  },
+  {
     "path": "/viewer#params",
     "label": "参数信息收集"
   }

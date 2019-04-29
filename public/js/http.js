@@ -20,7 +20,7 @@ jQuery && (function ($) {
             toast: 'toast'
         }
 
-        var holder = packing(['action', 'method', 'success', 'error'], options);
+        var holder = packing(['action', 'method', 'success', 'error', 'dataFilter'], options);
         // 如果第一个参数是function, 那么说明没有传settings
         if (typeof args[1] == 'function') {
             successFn = args[1];
@@ -49,6 +49,19 @@ jQuery && (function ($) {
             type: 'get',
             dataType: 'json',
             timeout: 30000,
+            dataFilter: function(data) {
+                if (!holder.dataFilter) {
+                    return data;
+                }
+                var result = holder.dataFilter.call(options, JSON.parse(data));
+                if (typeof result === 'string') {
+                    return result;
+                } else if (result instanceof Object) {
+                    return JSON.stringify(result);
+                } else {
+                    return data;
+                }
+            },
             success: function (response) {
                 if (typeof settings.mock === 'function') {
                     response = settings.mock.apply(options, arguments) || response;
@@ -99,10 +112,13 @@ jQuery && (function ($) {
             } else {
                 try{
                     var toast = settings.toast;
-                    if (toast && response[toast]) {
-                        var xhr = JSON.parse(localStorage.getItem(toast + '_xhr')) || [];
-                        var data = ($.isArray(xhr) ? xhr : [xhr]).concat(response[toast]);
-                        localStorage.setItem(toast + '_xhr', JSON.stringify(data));
+                    if (!holder.dataFilter && toast && response[toast]) {
+                        // var xhr = JSON.parse(localStorage.getItem(toast + '_xhr')) || [];
+                        // var data = ($.isArray(xhr) ? xhr : [xhr]).concat(response[toast]);
+                        // localStorage.setItem(toast + '_xhr', JSON.stringify(data));
+                        $.toast && $.toast({
+                            list: response[toast]
+                        });
                     }
                 } catch(e) {
                     console.log(e);

@@ -7,12 +7,30 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <link rel="stylesheet" href="<%= BASE_URL %>css/default.css">
     <title>docs</title>
+    <script src="<%= BASE_URL %>js/jquery.min.js"></script>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but docs doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
+    <script>
+      var baseUrl = "<%= BASE_URL %>";
+    </script>
     <!-- built files will be auto injected -->
+    <script>
+      $(document).on("click", ".refresh", function(){
+        var iframe = $(this).closest(".iframe-box").find("iframe");
+        if (iframe.length) {
+          iframe[0].contentWindow.location.reload(true);
+        }
+      });
+      $(document).on("click", ".open", function(){
+        var iframe = $(this).closest(".iframe-box").find("iframe");
+        if (iframe.length) {
+          window.open(iframe.attr("src"), '_blank');
+        }
+      });
+    </script>
   </body>
 </html>

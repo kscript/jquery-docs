@@ -3,7 +3,10 @@
     <v-vuemarkdown
      class="md-editor-preview markdown-body"
      ref="markdown"
+     toc
+     toc-anchor-link-symbol=""
      :source="content"
+     :watches="watches"
      @rendered="rendered">
     </v-vuemarkdown>
   </div>
@@ -17,6 +20,7 @@ import VueMarkdown from 'vue-markdown'
 export default {
   data () {
     return {
+      watches: ["source", "show", "toc"],
       content: ''
     }
   },
@@ -30,8 +34,8 @@ export default {
   },
   methods: {
     parseHash () {
-      let hash = this.$route.hash.slice(1)
-      this.$store.dispatch('server', hash).then(data => {
+      let hash = (this.$route.hash || '').replace(/^#*/, '').split('#');
+      hash.length && this.$store.dispatch('server', hash[0]).then(data => {
         this.content = data
       })
     },

@@ -1,0 +1,94 @@
+<link rel="stylesheet" href="../css/muilt-picker.css">
+<style>
+.wrapper {
+    width: 300px;
+}
+.text{
+    padding: 10px 0%;
+}
+</style>
+<div class="wrapper" style="position: relative">
+    <div class="salary-picker muilt-picker">
+        <div class="picker-input-group">
+            <input class="picker-start" type="text" name="" readonly>
+            <span class="split-label"></span>
+            <input class="picker-end" type="text" name="" readonly>
+        </div>
+        <div class="picker-container">
+            <!-- <div class="picker-title table-ui">
+                <div class="table-cell-ui left-label">?</div>
+                <div class="table-cell-ui center-label">-</div>
+                <div class="table-cell-ui right-label">?</div>
+            </div> -->
+            <ul class="select-group scroll-bar">
+                <li class="li-item" data-value="1000">1000</li>
+                <li class="li-item" data-value="2000">2000</li>
+                <li class="li-item" data-value="3000">3000</li>
+                <li class="li-item" data-value="4000">4000</li>
+                <li class="li-item" data-value="5000">5000</li>
+                <li class="li-item" data-value="6000">6000</li>
+                <li class="li-item" data-value="7000">7000</li>
+                <li class="li-item" data-value="8000">8000</li>
+                <li class="li-item" data-value="9000">9000</li>
+                <li class="li-item" data-value="10000">10000</li>
+            </ul>
+        </div>
+    </div>
+    <div class="text">
+        点击 input 来触发选择器, 以用户两次选择的区间值作为结果
+    </div>
+</div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/muiltPicker.js"></script>
+<script>
+    $(".salary-picker").muiltPicker({
+        mede: 'range',
+        // 鼠标移出组件容器时关闭?
+        leaveClose: false,
+        // 点击组件外时自动关闭?
+        autoClose: false,
+        // 隐藏组件时重置已选项? 
+        resetSelected: true,
+        // 自定义一些即将会用到的元素, 将它们合并到 this.elms
+        customElms: function(source, context){
+            return {
+                start: $(".picker-start", source),
+                end: $(".picker-end", source)
+            }
+        },
+        // 在组件外点击时, 会调用outsideClick, 根据返回值确定是否要隐藏组件
+        // true: 隐藏 flase: 阻止隐藏
+        outsideClick: function(selected){
+            return !this.options.active || this.options.active == 'start';
+        },
+        // 用户点击了某一个选项, 如果 beforeChange 里的返回值为false, 那么可以阻止触发组件的afterChange方法
+        // 最佳实践: 在 beforeChange 处理是否 触发选择项改变, 在afterChange处理 选择项改变
+        beforeChange: function($that, selected, active){
+            if (active == 'start') {
+                var index = $that.index();
+                this.options.active = 'end';
+                this.elms.start.val($that.data("value"));
+                this.elms.end.val('');
+                // 将 index 小于当前选择元素的兄弟元素设置为不可点击
+                $that.siblings().each(function(){
+                    if (index > $(this).index()) {
+                        $(this).addClass("disabled");
+                    }
+                })
+            } else {
+                this.options.active = 'start';
+                this.elms.end.val($that.data("value"));
+            }
+            $that.addClass("selected");
+        },
+        // 处理 用户选择项改变 时的逻辑
+        afterChange: function($that, selected, active){
+            active == 'start' && this.hide();
+        },
+        // 组件已隐藏时
+        afterHide: function(){
+            this.options.active = 'start';
+            this.elms.option.removeClass("selected").removeClass("disabled");
+        }
+    });
+</script>

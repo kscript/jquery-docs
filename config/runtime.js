@@ -8,10 +8,10 @@ export default Object.assign(
   // 各自的一些配置
   {
     development: {
-      publicPath: '/docs'
+      publicPath: '/out'
     },
     production: {
-      publicPath: '/docs',
+      publicPath: '/out',
     }
   }[process.env.NODE_ENV]
 )

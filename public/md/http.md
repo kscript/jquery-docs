@@ -11,7 +11,7 @@ $.http 方法通过对 $.ajax 的请求结果进行处理, 实现: 错误拦截,
 ### 使用示例
 ``` js
     $.http({
-            url: ''
+            url: '../test.json'
         }, 
         // // settings 可以省略
         // {
@@ -26,6 +26,13 @@ $.http 方法通过对 $.ajax 的请求结果进行处理, 实现: 错误拦截,
         }
     );
 ```
+<div class="iframe-box no-border" style="padding-bottom: 360px;position: relative; z-index: 99999;">
+<div class="handlers">
+    <div class="btn refresh">刷新示例</div>
+    <div class="btn open">新窗口打开</div>
+</div>
+<iframe src="html/http.html" style="border: 0;width: 100%;min-width: 600px;min-height: 360px; position: absolute;"></iframe>
+</div>
 
 ### 参数说明
 
@@ -54,3 +61,12 @@ $.http 方法通过对 $.ajax 的请求结果进行处理, 实现: 错误拦截,
 | showError | "true" | 请求出错时提示错误信息 |
 | retry | 3 | 请求失败时的重试次数 |
 | toast | 'toast' | 提示信息key, 如果返回数据中存在该属性则提示, 为空时不提示 |
+
+<font color="green">如果不想要默认的toast效果, 可以设置options.dataFilter</font>
+
+### 变异方法
+dataFilter:   
+将第一个参数由 jsonString 改为 json   
+如果返回值data为string, 返回 data  
+如果返回值data为object, 返回 JSON.stringify(data)  
+如果返回值data为其它, 返回 原有的jsonString  

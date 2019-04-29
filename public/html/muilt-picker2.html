@@ -1,0 +1,65 @@
+<link rel="stylesheet" href="../css/muilt-picker.css">
+<style>
+.wrapper {
+    width: 300px;
+}
+.text{
+    padding: 10px 0%;
+}
+</style>
+<div class="wrapper" style="position: relative">
+    <div class="cell">
+        <div class="city-picker muilt-picker">
+            <div class="picker-input-group">
+                <input class="picker-input" type="text" name="" readonly>
+            </div>
+            <div class="picker-container">
+                <ul class="select-group scroll-bar">
+                </ul>
+            </div>
+        </div>
+        <div class="text">
+            点击触发选择器, 在 beforeChange 里判断用户选择的值的长度
+            <br>
+            当前实例最多允许选择3个选项
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/muiltPicker.js"></script>
+<script>
+    $(".city-picker").muiltPicker({
+        mede: 'muilt',
+        // 设置: 隐藏组件时不要重置已选项
+        resetSelected: false,
+        // 生成dom结构
+        generator: function(done){
+            return ['北京', '上海', '广州', '深圳'].map(function(item, index){
+                return '<li class="li-item" data-value="' + index + '">' + item + '</li>'
+            }).join("");
+        },
+        // 自定义一些即将会用到的元素, 将它们合并到 this.elms
+        customElms: function(source, context) {
+            return {
+                input: $(".picker-input", source)
+            }
+        },
+        // 在组件外点击时, 会调用outsideClick, 根据返回值确定是否要隐藏组件
+        // true: 隐藏 flase: 阻止隐藏
+        outsideClick: function(selected){
+            return selected.length > 0;
+        },
+        // 用户点击了某一个选项, 如果 beforeChange 里的返回值为false, 那么可以阻止触发组件的afterChange方法
+        // 最佳实践: 在 beforeChange 处理是否 触发选择项改变, 在afterChange处理 选择项改变
+        beforeChange: function($that, selected, active) {
+            if (selected.length >= 3 && !$that.hasClass("selected")) return false;
+            $that.toggleClass("selected");
+        },
+        // 用户选择项改变
+        afterChange: function($that, selected, active){
+            this.elms.input.val(selected.map(function(item){
+                return $(item).text();
+            }).join());
+        }
+    });
+</script>
