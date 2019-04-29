@@ -26,5 +26,13 @@
   {
     "path": "/viewer#params",
     "label": "参数信息收集"
+  },
+  {
+    "path": "/viewer#form-control",
+    "label": "输入框ui"
+  },
+  {
+    "path": "/viewer#elementBox",
+    "label": "超出隐藏元素盒"
   }
 ]

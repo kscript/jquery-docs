@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>params</title>
+    <link rel="stylesheet" href="../css/sweetalert.css">
+    <style>
+        .table {
+            display: table
+        }
+
+        .table-cell {
+            padding: 10px 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="table">
+        <div class="table-cell">
+            <div style="height: 200px;">
+                <div class="text" data-name="text">Hello world!</div>
+                <p>
+                    <input name="name" value="form-- 123">
+                    <div class="console" data-name="console" data-value="data-- 这是一条通过元素data获取的数据, 需要配置data-name, data-value">
+                        <pre></pre>
+                    </div>
+                </p>
+                <div>
+                    更多信息, 请打开控制台查看
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/params.js"></script>
+    <script>
+        var token = 'var-- f65fc8448wnvSU1yHijqU13STm7eglnXD1V5n11O'
+        myParams({
+            var: [
+                'token',
+                {
+                    'value1': 'var-- 数组元素是对象时, 遍历这个对象的属性',
+                    'value2': function(){
+                        return 'var-- 对象属性是函数时,这个属性和其返回值可以合并为一个属性(只有var, url,form支持这种方式)';
+                    },
+                }
+            ],
+            url: [
+                'id'
+            ],
+            form: 'name',
+            text: ".text",
+            data: '.console',
+            // param 只支持 object/object[] 的写法, 
+            param: [
+                {
+                    name: '合并方式1',
+                    value: 'param-- name和value属性同时存在时, 将它们组合为一个属性',
+                    other: "param-- 合并方式1只有 name+value 会被组合后合并"
+                },
+                {
+                    "合并方式2": "param-- name和value属性没有同时存在时, 遍历这个对象里所有的属性",
+                    other: "param-- 合并方式2的属性都会被合并"
+                }
+            ]
+        }, 
+        {
+            // 允许多个事件
+            muilt: true,
+            // 给表单元素添加事件支持
+            addEvent: true
+        },
+        function(data){
+            $(".console pre").html(JSON.stringify(data.json, null, 2));
+            console.log(data);
+        });
+    </script>
+</body>
+
+</html>

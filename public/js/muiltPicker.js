@@ -326,6 +326,7 @@ jQuery && (function ($) {
                         "click",
                         options.triggerSelecotr,
                         function () {
+                            execCommand("triggered");
                             if (picker.state != 'show') {
                                 $(this).closest(".is-empty").removeClass("is-empty");
                                 options.autoShow && picker.show();

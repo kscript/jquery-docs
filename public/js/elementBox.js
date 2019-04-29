@@ -1,5 +1,5 @@
 jQuery && (function ($) {
-    $.extend({
+    $.fn.extend({
         /**
          * 放置元素的盒子
          * @param {object} option 
@@ -35,35 +35,39 @@ jQuery && (function ($) {
                     }, option),
                     elms: {},
                     selectElms: function(context, option){
-                        option = option || this.option;
+                        var that = this;
                         var elms = {};
-                        $.each([
-                            'container', 'tag', 'item'
-                        ], function(key, item){
-                            elms[item] = $(option[item], context);
+                        context = context || that.context;
+                        elms.container = $(that.option.container, context);
+                        if (!elms.container.length) {
+                            elms.container = context;
+                        }
+                        $.each(['tag', 'item'], function(key, item){
+                            elms[item] = $(that.option[item], context);
                         });
                         return elms;
                     },
                     init: function() {
                         var that = this;
-                        this.elms = this.selectElms(context);
+                        that.elms = that.selectElms(that.context, option);
                         if (!option.height) {
                             that.option.height = that.elms.container.height();
                         }
                         that.elms.container.css($.extend({
                             height: that.option.height,
+                            width: that.option.width || '100%',
                             position: 'relative',
                             overflow: "hidden",
                             display: "block"
                         },that.option.containerStyle));
-                        this.elms.item.css($.extend({
+                        that.elms.item.css($.extend({
                             paddingRight: 15,
                             height: 'auto',
                             overflow: 'initial'
                         }, that.option.itemStyle));
                         that.elms.tag.css($.extend({
                             position: "absolute",
-                            top: 0,
+                            top: -6,
                             right: 0,
                             zIndex: 9999,
                             color: "#333",
@@ -72,12 +76,24 @@ jQuery && (function ($) {
                             display: "none",
                             cursor: 'pointer'
                         }, that.option.tagStyle));
+                        that.addEvent();
                         return that;
+                    },
+                    addEvent: function(){
+                        var that = this;
+                        if (!$(that.elms.item).data("elementBoxEvent")) {
+                            $(that.elms.item).data("elementBoxEvent", function(){
+                                that.compute();
+                            });
+                        } else {
+                            $(that.elms.item).off('DOMNodeInserted DOMNodeRemoved', $(that.elms.item).data("elementBoxEvent"));
+                        }
+                        $(that.elms.item).on('DOMNodeInserted DOMNodeRemoved', $(that.elms.item).data("elementBoxEvent"));
                     },
                     compute: function(target){
                         var over = false;
-                        var elms = target? this.selectElms($(target), this.option) : this.elms;
-                        if (elms.item.height() > this.option.height * this.option.scale) {
+                        var elms = target ? this.selectElms($(target), this.option) : this.elms;
+                        if (elms.item.height() > this.option.height * this.option.scale || elms.item.width() > elms.container.width()) {
                             elms.tag.text(this.option.text).show();
                             elms.container.addClass("over");
                             over = true;

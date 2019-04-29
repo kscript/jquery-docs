@@ -104,7 +104,7 @@ $(".muilt-picker").data("muiltPicker");
     <div class="btn refresh">刷新示例</div>
     <div class="btn open">新窗口打开</div>
 </div>
-<iframe src="html/muilt-picker1.html" style="border: 0;width: 100%;min-width: 600px;min-height: 360px; position: absolute;"></iframe>
+<iframe src="html/muiltPicker1.html" style="border: 0;width: 100%;min-width: 600px;min-height: 360px; position: absolute;"></iframe>
 </div>
 
 范围选择器 dom 结构
@@ -184,7 +184,7 @@ $(".salary-picker").muiltPicker({
     <div class="btn refresh">刷新示例</div>
     <div class="btn open">新窗口打开</div>
 </div>
-<iframe src="html/muilt-picker2.html" style="border: 0;width: 100%;min-width: 600px;min-height: 360px; position: absolute;"></iframe>
+<iframe src="html/muiltPicker2.html" style="border: 0;width: 100%;min-width: 600px;min-height: 360px; position: absolute;"></iframe>
 </div>
 多项选择器 dom 结构
 

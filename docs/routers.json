@@ -1,0 +1,34 @@
+[
+  {
+    "path": "/viewer#start",
+    "label": "开始"
+  },
+  {
+    "path": "/viewer#muiltPicker",
+    "label": "多项选择器"
+  },
+  {
+    "path": "/viewer#http",
+    "label": "请求数据"
+  },
+  {
+    "path": "/viewer#formSubmit",
+    "label": "表单提交"
+  },
+  {
+    "path": "/viewer#toast",
+    "label": "信息提示"
+  },
+  {
+    "path": "/viewer#qrcode",
+    "label": "二维码"
+  },
+  {
+    "path": "/viewer#params",
+    "label": "参数信息收集"
+  },
+  {
+    "path": "/viewer#form-control",
+    "label": "输入框ui"
+  }
+]
