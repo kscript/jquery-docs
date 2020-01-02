@@ -1,7 +1,0 @@
-{
-  "routes": "./routers.json",
-  "server": {
-    "path": "/md/",
-    "ext": ".md"
-  }
-}

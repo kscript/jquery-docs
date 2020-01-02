@@ -21,11 +21,8 @@ yarn-error.log*
 *.sw*
 
 public/api
-public/node_modules
-public/config.local.json
 
 docs/api
-docs/node_modules
 docs/config.local.json
 
 static/
