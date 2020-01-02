@@ -4,10 +4,6 @@
     "label": "开始"
   },
   {
-    "path": "/viewer#muiltPicker",
-    "label": "多项选择器"
-  },
-  {
     "path": "/viewer#http",
     "label": "请求数据"
   },
@@ -32,7 +28,15 @@
     "label": "输入框ui"
   },
   {
+    "path": "/viewer#muiltPicker",
+    "label": "多项选择器"
+  },
+  {
     "path": "/viewer#elementBox",
     "label": "超出隐藏元素盒"
+  },
+  {
+    "path": "/viewer#batch",
+    "label": "批量任务"
   }
 ]
