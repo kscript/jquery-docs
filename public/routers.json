@@ -28,8 +28,8 @@
     "label": "多项选择器"
   },
   {
-    "path": "/viewer#elementBox",
-    "label": "超出隐藏元素盒"
+    "path": "/viewer#form-control",
+    "label": "输入框ui"
   },
   {
     "path": "/viewer#batch",
