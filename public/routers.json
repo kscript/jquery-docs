@@ -24,10 +24,6 @@
     "label": "参数信息收集"
   },
   {
-    "path": "/viewer#form-control",
-    "label": "输入框ui"
-  },
-  {
     "path": "/viewer#muiltPicker",
     "label": "多项选择器"
   },
@@ -38,5 +34,9 @@
   {
     "path": "/viewer#batch",
     "label": "批量任务"
+  },
+  {
+    "path": "/viewer#fuzzySearch",
+    "label": "模糊搜索"
   }
 ]
