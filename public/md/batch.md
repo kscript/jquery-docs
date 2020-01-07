@@ -3,15 +3,6 @@
 
 ### 需求/用途
 
-### 使用示例
-<div class="iframe-box" style="padding-bottom: 400px;position: relative; z-index: 99999;">
-<div class="handlers">
-    <div class="btn refresh">刷新示例</div>
-    <div class="btn open">新窗口打开</div>
-</div>
-<iframe src="html/batch.html" style="border: 0;width: 100%;min-width: 600px;min-height: 400px; position: absolute;"></iframe>
-</div>
-
 ### 参数说明
 
 |属性|类型|默认值|说明|
@@ -29,3 +20,12 @@ stateChange 函数的参数
  - index: 当前任务在队列里的索引
  - err: 执行出错时的报错信息
  - res: 执行结果
+
+ ### 使用示例
+<div class="iframe-box" style="padding-bottom: 400px;position: relative; z-index: 99999;">
+<div class="handlers">
+    <div class="btn refresh">刷新示例</div>
+    <div class="btn open">新窗口打开</div>
+</div>
+<iframe src="html/batch.html" style="border: 0;width: 100%;min-width: 600px;min-height: 400px; position: absolute;"></iframe>
+</div>

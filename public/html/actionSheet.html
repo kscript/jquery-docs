@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>动作面板</title>
+    <link rel="stylesheet" href="../css/actionSheet.css">
+    <link rel="stylesheet" href="../css/modal.css">
+</head>
+
+<body>
+    <div class="demo"></div>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/actionSheet.js"></script>
+    <script src="../js/modal.js"></script>
+    <script>
+        $(".demo").actionSheet({
+            title: '使用手机调试模式查看效果',
+            items: [
+                {text: 'QQ'},
+                {text: '微信'},
+                {text: '微博'},
+                {text: '钉钉'}
+            ],
+            confirm: function(item, index){
+                $.alert('选择了第' + (index + 1) + '个选项: ' + item.text)
+            }
+        })
+    </script>
+</body>
+
+</html>
